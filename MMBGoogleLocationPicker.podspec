@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
       'LocationPicker/Resources/*.{lproj,storyboard}/*.{xib,strings}'
     ],
     'Resources' => [
-      'Sources/LocationPicker/Resources/*.lproj'
+      'LocationPicker/Resources/*.lproj'
     ]
   }
 
