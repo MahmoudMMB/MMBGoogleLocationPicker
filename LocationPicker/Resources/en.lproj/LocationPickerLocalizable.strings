@@ -1,0 +1,13 @@
+/* 
+  Localizable.strings
+  LocationPickerViewControllerRTL
+
+  Created by Mahmoud Al-Belbeisi on 3/21/20.
+  Copyright © 2020 MahmoudMMB. All rights reserved.
+*/
+"Current Location" = "Current Location";
+"Search for location" = "Search for location";
+"Location access denied" = "Location access denied";
+"Grant location access to use current location" = "Allow location access to use current location";
+"Grant" = "Allow";
+"Cancel" = "Cancel";

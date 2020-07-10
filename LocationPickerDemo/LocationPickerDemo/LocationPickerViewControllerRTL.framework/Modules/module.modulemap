@@ -1,0 +1,4 @@
+framework module LocationPickerViewControllerRTL {
+  header "LocationPickerViewControllerRTL-Swift.h"
+  requires objc
+}

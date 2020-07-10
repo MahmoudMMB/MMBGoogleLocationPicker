@@ -1,0 +1,6 @@
+framework module Pods_MMBGoogleLocationPicker {
+  umbrella header "Pods-MMBGoogleLocationPicker-umbrella.h"
+
+  export *
+  module * { export * }
+}
