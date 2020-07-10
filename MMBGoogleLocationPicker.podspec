@@ -13,14 +13,12 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.swift_version = '4.2'
   s.source_files = 'LocationPicker/*.{h,m,swift}'
-  s.resource_bundles = {
-    'Resources' => [
-      'Sources/FDTake/Resources/*.lproj'
-    ]
-
   s.resource_bundles  = {
     'MMBGoogleLocationPicker' => [
       'LocationPicker/Resources/*.{lproj,storyboard}/*.{xib,strings}'
+    ],
+    'Resources' => [
+      'Sources/LocationPicker/Resources/*.lproj'
     ]
   }
 
