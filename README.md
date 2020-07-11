@@ -2,7 +2,7 @@
 
 A ready for use and fully customizable location picker for your app.
 
-![](https://raw.githubusercontent.com/MahmoudMMB/MMBGoogleLocationPicker/master/Screenshots/locationpicker.gif)
+![](https://raw.githubusercontent.com/MahmoudMMB/MMBGoogleLocationPicker/master/Screenshots/MMBGoogleLocationPicker.gif)
 
 ![Language](https://img.shields.io/badge/language-Swift%204.1-orange.svg)
 [![CocoaPods](https://img.shields.io/cocoapods/v/MMBGoogleLocationPicker.svg?style=flat)](http://cocoadocs.org/docsets/MMBGoogleLocationPicker/)
