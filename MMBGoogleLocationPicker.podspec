@@ -23,4 +23,6 @@ Pod::Spec.new do |s|
   }
 
   s.exclude_files = "LocationPicker/*.plist"
+  s.dependency 'GoogleMaps', '~> 2.7.0'
+  s.dependency 'GooglePlaces', '~> 2.7.0'
 end
