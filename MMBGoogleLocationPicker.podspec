@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "MMBGoogleLocationPicker"
-  s.version          = "0.0.1"
+  s.version          = "0.0.4"
   s.summary          = "A ready for use and fully customizable location picker for your app."
 
   s.homepage         = "https://github.com/MahmoudMMB/MMBGoogleLocationPicker"
