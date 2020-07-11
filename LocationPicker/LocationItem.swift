@@ -29,54 +29,21 @@
 import GoogleMaps
 import GooglePlaces
 
-/**
- A `MKMapItem` encapsulation class to save you from importing `MapKit` everywhere in you project and provide some convenience.
- 
- - important:
- This class is a encapsulation of `MKMapItem`, you can access the `MKMapItem` object via `mapItem` property.
- 
- - Note:
- `LocationItem` provides some get-only computed property to access properties of `MKMapItem` object more easily.
- 
-        var name: String
-        var coordinate: (latitude: Double, longitude: Double)
-        var addressDictionary: [NSObject: AnyObject]?
-        var formattedAddressString: String?
- 
- This class provides two initialization methods, you can either provide a `MKMapItem` object or provide a coordinate and an address dictionary to initialize.
- 
- This class is hashable, the hash value of this class is the hash value of the combined string of latitude and longitude.
- 
- This class is equalable, objects have the same latitude and longitude are equal.
- 
- Objects of this class can be encoded and decoded.
- 
-        let locationData = NSKeyedArchiver.archivedDataWithRootObject(locationItem)
-        let locationItem = NSKeyedUnarchiver.unarchiveObjectWithData(locationData) as! LocationItem
- */
 open class LocationItem: NSObject, NSCoding {
     
     public let mapItem: GMSPlace?
     
     
-    /// The name of the location. A reference to `MKMapItem` object's property `name`.
     open var name: String {
         return mapItem?.name ?? address ?? formattedAddressString ?? ""
     }
     
-    /// The coordinate of the location. A reference to `MKMapItem` object's property `placemark.coordinate` and converted to tuple. Only when the `allowArbitraryLocation` property of `LocationPicker` class is set to `true`, can this property be `nil`.
     open var coordinate: CLLocationCoordinate2D?
     open var address: String?
     
-    
-    /// The address dictionary of the location. A reference to `MKMapItem` object's property `placemark.addressDictionary`
-    /// - Note: This dictionary along with a coordinate can be used to create a `MKPlacemark` object which can create a `MKMapItem` object.
     open var addressDictionary: GMSPlace? {
         return mapItem
     }
-    
-    /// The address of the location. This is the value to the key _"FormattedAddressLines"_ in `addressDictionary`. It is the address text formatted according to user's region.
-    /// - Note: If you would like to format the address yourself, you can use `addressDictionary` property to create one.
     
     open var formattedAddressString: String? {
         return mapItem?.formattedAddress
