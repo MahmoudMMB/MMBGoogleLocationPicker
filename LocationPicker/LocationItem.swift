@@ -82,15 +82,6 @@ open class LocationItem: NSObject, NSCoding {
         return mapItem?.formattedAddress
     }
     
-    
-    open override var hash: Int {
-        if let coordinate = coordinate {
-            return "\(coordinate.latitude), \(coordinate.longitude)".hash
-        } else {
-            return mapItem?.name.hash ?? "".hash
-        }
-    }
-    
     open override var description: String {
         return "Location item with map item: " + (mapItem?.description ?? "")
     }
@@ -105,11 +96,6 @@ open class LocationItem: NSObject, NSCoding {
         self.mapItem = place
         self.address = address
     }
-    open override func isEqual(_ object: Any?) -> Bool {
-        guard let object = object else { return false }
-        return true//(object as AnyObject).hashValue == hashValue
-    }
-    
     
     public required convenience init(coder aDecoder: NSCoder) {
         let latitude = aDecoder.decodeDouble(forKey: "latitude")
