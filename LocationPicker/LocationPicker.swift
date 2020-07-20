@@ -36,9 +36,13 @@ open class LocationPicker: UIViewController, UIGestureRecognizerDelegate {
         return LocationPicker.init(nibName: "LocationPicker", bundle: Bundle.init(for: LocationPicker.self))
     }
     // MARK: Types
-    public static var googleMapKey: String = "" {
+    public static var GMSServicesKey: String = "" {
         willSet {
             GMSServices.provideAPIKey(newValue)
+        }
+    }
+    public static var GMSPlacesClientKey: String = "" {
+        willSet {
             GMSPlacesClient.provideAPIKey(newValue)
         }
     }

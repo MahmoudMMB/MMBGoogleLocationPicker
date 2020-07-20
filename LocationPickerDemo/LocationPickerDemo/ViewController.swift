@@ -19,7 +19,8 @@ class ViewController: UIViewController {
     }
     
     @IBAction func presentLocationPickerButtonDidTap(button: UIButton) {
-        LocationPicker.googleMapKey = "AIzaSyBrWglZENOn9R8_AXpLxGUMiwWo3DyMelI"
+        LocationPicker.GMSServicesKey = "Your_Goole_map_key"
+        LocationPicker.GMSPlacesClientKey = "Your_Goole_map_key"
         let locationPicker = LocationPicker.shared
         locationPicker.pickCompletion = { (pickedLocationItem) in
             if let coordinate = pickedLocationItem.coordinate {
