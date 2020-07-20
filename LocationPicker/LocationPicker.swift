@@ -300,6 +300,10 @@ open class LocationPicker: UIViewController, UIGestureRecognizerDelegate {
     
     @IBOutlet var contentView: UIView!
     
+    @IBOutlet weak var viewAddress: UIView!
+    
+    @IBOutlet weak var lblAddress: UILabel!
+    
     public var resultsViewController: GMSAutocompleteResultsViewController?
     public var searchController: UISearchController?
     public var resultView: UITextView?
@@ -447,29 +451,29 @@ open class LocationPicker: UIViewController, UIGestureRecognizerDelegate {
         return true
     }
     
-    
-    // MARK: - View Controller
+    private lazy var searchTextField: UITextField? = { [unowned self] in
+        guard let searchBar = self.searchController?.searchBar else { return nil }
+        var views =  searchBar.subviews
+        while !views.isEmpty {
+            guard let view = views.popLast() else { break }
+            if let textfield = view as? UITextField {
+                return textfield
+            }
+            views += view.subviews
+        }
+        return nil
+    }()
     
     // MARK: - View Controller
     open override func viewDidLoad() {
         super.viewDidLoad()
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self
-        
         searchController = UISearchController(searchResultsController: resultsViewController)
         searchController?.searchResultsUpdater = resultsViewController
-        
-        // Put the search bar in the navigation bar.
         searchController?.searchBar.sizeToFit()
         navigationItem.titleView = searchController?.searchBar
-        
-        // When UISearchController presents the results view, present it in
-        // this view controller, not one further up the chain.
-        definesPresentationContext = true
-        
-        // Prevent the navigation bar from being hidden when searching.
         searchController?.hidesNavigationBarDuringPresentation = false
-        
         setupLocationManager()
         setupViews()
         layoutViews()
@@ -556,8 +560,6 @@ open class LocationPicker: UIViewController, UIGestureRecognizerDelegate {
         
         view.addSubview(pinShadowView)
         view.addSubview(pinView)
-        //        mapView.frame = CGRect.init(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height)
-        //        view.addSubview(mapView)
     }
     
     private func layoutViews() {
@@ -566,14 +568,6 @@ open class LocationPicker: UIViewController, UIGestureRecognizerDelegate {
         pinShadowView.translatesAutoresizingMaskIntoConstraints = false
         
         if #available(iOS 9.0, *) {
-            //            mapView.topAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-            //            mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-            //            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-            //            mapView.bottomAnchor.constraint(equalTo: view.topAnchor).isActive = true
-            
-            //            mapViewHeightConstraint = mapView.heightAnchor.constraint(equalToConstant: view.frame.height * 0.65)
-            //            mapViewHeightConstraint.isActive = true
-            
             pinView.centerXAnchor.constraint(equalTo: mapView.centerXAnchor).isActive = true
             pinViewCenterYConstraint = pinView.centerYAnchor.constraint(equalTo: mapView.centerYAnchor, constant: -pinViewImageHeight / 2)
             pinViewCenterYConstraint.isActive = true
@@ -584,15 +578,6 @@ open class LocationPicker: UIViewController, UIGestureRecognizerDelegate {
             pinShadowView.heightAnchor.constraint(equalToConstant: pinShadowViewDiameter).isActive = true
             
         } else {
-            
-            //            NSLayoutConstraint(item: mapView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
-            //            NSLayoutConstraint(item: mapView, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 0).isActive = true
-            //            NSLayoutConstraint(item: mapView, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
-            //            NSLayoutConstraint(item: mapView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0).isActive = true
-            
-            //            mapViewHeightConstraint = NSLayoutConstraint(item: mapView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: view.frame.height * 0.65)
-            //            mapViewHeightConstraint.isActive = true
-            
             NSLayoutConstraint(item: pinView, attribute: .centerX, relatedBy: .equal, toItem: mapView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
             pinViewCenterYConstraint = NSLayoutConstraint(item: pinView, attribute: .centerY, relatedBy: .equal, toItem: mapView, attribute: .centerY, multiplier: 1, constant: -pinViewImageHeight / 2)
             pinViewCenterYConstraint.isActive = true
@@ -646,17 +631,12 @@ open class LocationPicker: UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: UI Mainipulations
     private func showMapView(withCenter coordinate: CLLocationCoordinate2D, distance: Float) {
-        //        mapViewHeightConstraint.constant = mapViewHeight
-        DispatchQueue.main.async {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
             let camera = GMSCameraPosition.camera(withLatitude: coordinate.latitude, longitude: coordinate.longitude, zoom: distance)
             if let map =  self.mapView {
                 map.animate(to: camera)
             }
         }
-    }
-    
-    private func closeMapView() {
-        //        mapViewHeightConstraint.constant = 0
     }
     
     
@@ -669,12 +649,11 @@ open class LocationPicker: UIViewController, UIGestureRecognizerDelegate {
      */
     public func selectLocationItem(_ locationItem: LocationItem) {
         selectedLocationItem = locationItem
-        resultView?.text = locationItem.name
-        if let coordinate = locationItem.coordinate {
-            showMapView(withCenter: coordinate, distance: longitudinalDistance)
-        } else {
-            closeMapView()
-        }
+        lblAddress.text = locationItem.name
+        viewAddress.isHidden = locationItem.name.count == 0
+//        if let coordinate = locationItem.coordinate {
+//            showMapView(withCenter: coordinate, distance: longitudinalDistance)
+//        }
         
         barButtonItems?.doneButtonItem.isEnabled = true
         locationDidSelect(locationItem: locationItem)
@@ -695,24 +674,6 @@ open class LocationPicker: UIViewController, UIGestureRecognizerDelegate {
             let mapItem = LocationItem.init(coordinate: location.coordinate, place: nil, address: addressLabel)
             self.selectLocationItem(mapItem)
         }
-        
-        
-        //        geocoder.cancelGeocode()
-        //        geocoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) -> Void in
-        //            guard error == nil else {
-        //                print(error!)
-        //                return
-        //            }
-        //            guard let placemarks = placemarks else { return }
-        //            var placemark = placemarks[0]
-        //            if !self.isRedirectToExactCoordinate {
-        //                placemark = MKPlacemark(coordinate: location.coordinate, addressDictionary: placemark.addressDictionary as? [String : NSObject])
-        //            }
-        //            if !(self.resultView?.isFirstResponder ?? true) {
-        //                let mapItem = LocationItem.init
-        //                self.selectLocationItem(LocationItem(mapItem: mapItem))
-        //            }
-        //        })
     }
     
 }
@@ -893,14 +854,10 @@ extension LocationPicker {
 // MARK: Map View Delegate
 
 extension LocationPicker: GMSMapViewDelegate {
+    
     public func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
-        //        longitudinalDistance = mapView.camera.position.zoom
-        //        if gesture {
-        //            UIView.animate(withDuration: 0.35, delay: 0, options: .curveEaseOut, animations: {
-        //                self.pinView.frame.origin.y -= self.pinViewImageHeight / 2
-        //            }, completion: nil)
-        //        }
     }
+    
     public func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
         longitudinalDistance = position.zoom
         if isMapViewCenterChanged {
